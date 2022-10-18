@@ -1,4 +1,4 @@
-
+//Reference from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/
 public class SearchTree{
 	public Node root;
 	other helper = new other(); //creating an object of helper class
@@ -7,58 +7,48 @@ public class SearchTree{
 
 	}
 	boolean add(String key) {
-		try{
-			if(key == null || key == ""){
-				return false;
-			}
-			//Adding key to the bottom of the tree and returning the newly added node as root
-			root = insert(root,key);
-			return true;
-//		if (root == null|| root.key!=key){
-//			return false;
-//		}
-//		else{
-//			return true;
-//		}
-
-		}
-		catch(Exception e){
+		//key is null
+		if(key == null){
 			return false;
 		}
-	}
-
-	//Reference from https://www.geeksforgeeks.org/binary-search-tree-set-1-search-and-insertion/
-	Node insert(Node root, String key) {
-		try{
-			//Tree is empty New node can be added
-			if(root == null) {
-				root = new Node(key);
-				return root;
-			}
-//		int comparison = helper.comparison(key, root.key);
-//		if(comparison == 0){
-//			return null;
-//		}
-
-			//Key of new node is less than root
-			else if(helper.comparison(key, root.key) < 0) {
-				//Passing left node as root with the key till we reach the leaf node
-				root.left = insert(root.left, key);
-			}
-			//Key of new node is less than root
-			else if(helper.comparison(key, root.key) > 0) {
-				//Passing right node as root with the key till we reach the leaf node
-				root.right = insert(root.right, key);
-			}
-			return root;
+		//First node in the tree
+		if(root == null){
+			root = new Node(key);
+			return true;
 		}
 
-		catch(Exception e){
-			System.out.println(e);
+		//instance of root
+		Node oldROot = root;
+		while(root != null){
+			if(key.compareToIgnoreCase(root.key) == 0){
+				root = oldROot;
+				return false;
+			}
+			//Add to the left
+			else if(key.compareToIgnoreCase(root.key) < 0 && root.left == null){
+				root.left = new Node(key);
+				root = oldROot;
+				return true;
+			}
+			//Add to the right
+			else if (key.compareToIgnoreCase(root.key) > 0 && root.right == null) {
+				root.right = new Node(key);
+				root = oldROot;
+				return true;
+			}
+
+			//Find leaf node to the right
+			else if (root.key.compareToIgnoreCase(key) < 0){
+				root = root.right;
+			}
+
+			//Find leaf node to the left
+			else if(root.key.compareToIgnoreCase(key) >0){
+				root = root.left;
+			}
+
 		}
-
-		return root;
-
+		return false;
 	}
 
 	int find(String key) {
@@ -68,15 +58,22 @@ public class SearchTree{
 			if(key == null || key == ""){
 				return 0;
 			}
-			//creating a reference variable with value of root
-			Node currentNode = root;
+			Node currentNode;
+			if(root == null){
+				return 0;
+			}
+			else{
+				//creating a reference variable with value of root
+				currentNode = root;
+			}
+
 			//finding parent node of current node
 			Node parentNode = helper.getParentNode(currentNode, key);
-			//current node is root node with depth 1
-//			if(parentNode == currentNode){
-//				depth++;
-//				return depth ;
-//			}
+			//Root node is being searched
+			if(parentNode == null){
+				currentNode.counter++;
+				return depth;
+			}
 
 			//Traversing till we find the node whose key is equal to key we are finding
 			while(currentNode.key!= key) {
