@@ -1,4 +1,4 @@
-# A2_CSCI3901
+#DynamicSearchTree (A2_CSCI3901)
 Implemented a data structure from basic objects
 
 This is Assignment 2 for course CSCI-3901.
